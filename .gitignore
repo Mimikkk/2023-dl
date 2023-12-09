@@ -1,2 +1,4 @@
 /venv/
 /.idea/
+/resources/datasets/
+/node_modules/

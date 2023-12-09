@@ -1,0 +1,32 @@
+{
+  "name": "deep-learning-research",
+  "description": "Deep Learning Research where we tried to manipulate the latent space of a GAN into a disentangled representation allowing us to perform image manipulation.",
+  "contributors": [
+    {
+      "name": "Agnieszka Klimek",
+      "url": "https://www.github.com/agak33"
+    },
+    {
+      "name": "Anna Prałat",
+      "email": "anna@pralat.pl",
+      "url": "https://www.github.com/a-pralat"
+    },
+    {
+      "name": "Daniel Zdancewicz",
+      "email": "zdancewicz.daniel@gmail.com",
+      "url": "https://www.github.com/Mimikkk"
+    }
+  ],
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "python scripts/setup.py",
+    "activate:python": ". venv/bin/activate",
+    "download:dataset:celeba": "python scripts/download_dataset_celeba.py",
+    "download:dataset:awa2": "python scripts/download_dataset_awa2.py",
+    "download:dataset:sun": "python scripts/download_dataset_sun.py",
+    "download:datasets": "concurrently -n download: pnpm:download:dataset:* -c red,green,blue"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
