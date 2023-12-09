@@ -1,11 +1,11 @@
 import subprocess
 import sys
-from utils import in_venv, cprint
+from utils import in_venv, cprint, ensure_cwd
 
 def install(*packages: list[str]) -> None:
   subprocess.call([sys.executable, "-m", "pip", "install", *packages])
 
-def iscream(text: str, color: str=None) -> None:
+def iscream(text: str, color: str = None) -> None:
   cprint('install', text, color, prefix_color='cyan')
 
 iscream('Checking if in virtual environment...')

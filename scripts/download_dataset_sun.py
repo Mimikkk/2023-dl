@@ -32,8 +32,6 @@ if __name__ == '__main__':
 
   iscream('Preparing downloads...')
 
-  if os.getcwd().endswith('scripts'): os.chdir('..')
-
   def ensure_dir(path: str) -> None:
     if not os.path.exists(path):
       os.makedirs(path)

@@ -37,9 +37,8 @@ Do rozruchu skryptów został wykorzystany `pnpm`, zaleca się instalację przez
 
 - `pnpm run download:dataset:celeba` - Służy do pobrania zbioru
   danych [CelebA (Large-scale CelebFaces Attributes)](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
-- `pnpm run download:dataset:mnist` - Służy do pobrania zbioru danych [AwA2 (Animals with Attributes 2)](https://cvml.ista.ac.at/AwA2/).
 - `pnpm run download:dataset:sun` - Służy do pobrania zbioru
-  danych [SUN (Sun Attribute)](https://cs.brown.edu/~gmpatter/sunattributes.html).
+  danych [LSUN (Sun Attribute)](https://cs.brown.edu/~gmpatter/sunattributes.html).
 - `pnpm run download:datasets` - Służy do pobrania wszystkich zbiorów danych.
 
 ### Instalacja pnpm

@@ -1,3 +1,4 @@
+import os
 import sys
 
 def in_venv():
@@ -20,3 +21,7 @@ def chalk(text: str, color: str | None = None) -> None:
 
 def cprint(prefix: str, text: str, color: str = None, *, prefix_color: str) -> None:
   print(f'[{chalk(prefix, prefix_color)}] {chalk(text, color)}')
+
+def ensure_cwd():
+  if os.getcwd().endswith('scripts'): os.chdir('..')
+ensure_cwd()
