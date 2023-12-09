@@ -27,7 +27,13 @@ iscream('Installing packages...')
 iscream('Installing torch. Ensure CUDA is installed...')
 install('torch', 'torchvision', 'torchaudio', '--index-url', 'https://download.pytorch.org/whl/cu118')
 
-iscream('Other dependencies...')
-install('requests', 'pandas', 'numpy', 'icecream', 'wget')
+iscream('Installing tensorboard...')
+install('tensorboard')
+
+iscream('Installing streamlit...')
+install('streamlit')
+
+iscream('Other packages...')
+install('requests', 'pandas', 'numpy', 'icecream', 'wget', 'matplotlib', 'tqdm')
 
 iscream('Installation successful.')
