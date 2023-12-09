@@ -31,7 +31,7 @@ Wstępne wymagania obejmują wykonanie następujących zadań:
 ## Skrypty
 
 Skrypty znajdują się w folderze [scripts](scripts).
-Do rozruchu skryptów został wykorzystany `pnpm`, zaleca się instalację przez [Node Version Manager](https://github.com/nvm-sh/nvm).
+Do rozruchu skryptów może zostać wykorzystany `pnpm`, zaleca się instalację przez [Node Version Manager](https://github.com/nvm-sh/nvm).
 
 ### Opis skryptów
 
