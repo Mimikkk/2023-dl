@@ -29,15 +29,3 @@ class CelebA(Dataset):
             img = self.img_transform(img)
 
         return (img, self.annotations.loc[filename].values)
-
-
-data_path = "../resources/datasets/celeba"
-annotations_path = "annotations/list_attr_celeba.txt"
-images_dir = "images"
-
-celeba_dataset = CelebA(data_path, annotations_path, images_dir)
-celeba_dataloader = DataLoader(celeba_dataset, batch_size=32, shuffle=True, num_workers=0)
-
-for batch in celeba_dataloader:
-    print(batch)
-    break
