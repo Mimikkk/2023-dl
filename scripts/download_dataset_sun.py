@@ -1,13 +1,13 @@
 import os
-from utils import cprint, chalk
+from utils import cprint, chalk, ensure_cwd
 import wget
 import tarfile
 import shutil
 
-def iscream(text: str, color: str = None) -> None:
-  cprint('download:sun', text, color, prefix_color='blue')
+def main():
+  def iscream(text: str, color: str = None) -> None:
+    cprint('download:sun', text, color, prefix_color='blue')
 
-if __name__ == '__main__':
   directory = 'resources/datasets/sun'
   cache = f'{directory}/cache'
   annotations_name = 'SUNAttributeDB.tar.gz'
@@ -98,3 +98,7 @@ if __name__ == '__main__':
 
   iscream('Extraction complete.')
   iscream('Dataset ready.')
+
+if __name__ == '__main__':
+  ensure_cwd()
+  main()

@@ -21,12 +21,17 @@
     "preinstall": "npx only-allow pnpm",
     "postinstall": "python scripts/setup.py",
     "activate:python": ". venv/bin/activate",
+    "ui:streamlit": "streamlit run ui.py",
+    "ui:tensorboard": "python tb.py",
+    "tensorboard:cleanlogs": "rimraf ./resources/logs",
+    "ui": "concurrently -n ui: pnpm:ui:* -c blue,yellow",
     "download:dataset:celeba": "python scripts/download_dataset_celeba.py",
     "download:dataset:awa2": "python scripts/download_dataset_awa2.py",
     "download:dataset:sun": "python scripts/download_dataset_sun.py",
     "download:datasets": "concurrently -n download: pnpm:download:dataset:* -c red,green,blue"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
   }
 }
