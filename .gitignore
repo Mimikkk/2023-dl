@@ -1,6 +1,5 @@
 /venv/
 /.idea/
 /resources/datasets/
-/resources/logs/
 /node_modules/
 /runs/
