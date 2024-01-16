@@ -1,4 +1,4 @@
-from scripts.utils import cprint, ensure_cwd
+from utils import cprint, ensure_cwd
 
 def iscream(text: str, color: str = None) -> None:
   cprint('download:celeba', text, color, prefix_color='blue')
