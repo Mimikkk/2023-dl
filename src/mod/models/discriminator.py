@@ -14,7 +14,7 @@ def initialize_weights(layer: nn.Module):
 class Discriminator(nn.Module):
   def __init__(
       self,
-      latent_vector_size: int,
+      channel_count: int,
       feature_map_size: int,
       *,
       with_init: bool = False,
@@ -22,7 +22,7 @@ class Discriminator(nn.Module):
   ):
     super(Discriminator, self).__init__()
     self.main = nn.Sequential(
-      nn.Conv2d(latent_vector_size, feature_map_size, 4, 2, 1, bias=False),
+      nn.Conv2d(channel_count, feature_map_size, 4, 2, 1, bias=False),
       nn.LeakyReLU(0.2, inplace=True),
       nn.Conv2d(feature_map_size, feature_map_size * 2, 4, 2, 1, bias=False),
       nn.BatchNorm2d(feature_map_size * 2),

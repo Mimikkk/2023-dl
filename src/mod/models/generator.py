@@ -16,7 +16,7 @@ class Generator(nn.Module):
       self,
       latent_vector_size: int,
       feature_map_size: int,
-      image_channel_count: int,
+      channel_count: int,
       *,
       with_weights: Optional[Mapping[str, Any]] = None,
       with_init: bool = False
@@ -35,7 +35,7 @@ class Generator(nn.Module):
       nn.ConvTranspose2d(feature_map_size * 2, feature_map_size, 4, 2, 1, bias=False),
       nn.BatchNorm2d(feature_map_size),
       nn.ReLU(True),
-      nn.ConvTranspose2d(feature_map_size, image_channel_count, 4, 2, 1, bias=False),
+      nn.ConvTranspose2d(feature_map_size, channel_count, 4, 2, 1, bias=False),
       nn.Tanh()
     )
     if with_init: self.apply(initialize_weights)

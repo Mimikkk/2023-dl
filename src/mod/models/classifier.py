@@ -1,3 +1,4 @@
+import numpy as np
 from torch import nn, Tensor
 
 def initialize_weights(layer: nn.Module):
@@ -7,23 +8,18 @@ def initialize_weights(layer: nn.Module):
       nn.init.constant_(layer.bias.data, 0)
 
 class Classifier(nn.Module):
-  def __init__(self, latent_vector_size: int, num_attributes: int, *, with_init: bool = False):
+  def __init__(self, img_shape, num_traits):
     super(Classifier, self).__init__()
-    self.num_attributes = num_attributes
-    self.layers = nn.Sequential(
-      nn.Linear(latent_vector_size, 512),
+    self.img_shape = img_shape
+    self.num_traits = num_traits
+
+    self.model = nn.Sequential(
+      nn.Linear(int(np.prod(img_shape)), 512),
       nn.ReLU(),
-      nn.Dropout(0.2),
       nn.Linear(512, 256),
       nn.ReLU(),
-      nn.Dropout(0.2),
-      nn.Linear(256, 128),
-      nn.ReLU(),
-      nn.Dropout(0.1),
-      nn.Linear(128, num_attributes),
-      nn.Sigmoid()
+      nn.Linear(256, num_traits)
     )
-    if with_init: self.apply(initialize_weights)
 
-  def forward(self, x: Tensor) -> Tensor:
-    return self.layers(x)
+  def forward(self, x):
+    return self.model(x.view(x.size(0), -1))
