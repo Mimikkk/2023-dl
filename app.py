@@ -17,6 +17,14 @@ from src.mod.datasets.utils import create_latent_vectors
 from src.mod.models import Classifier, Generator, LatentSpaceManipulator
 print('Importing done.')
 
+loss_fns = {
+  'KL Divergence Loss': torch.nn.KLDivLoss(),
+  'BCE Loss': torch.nn.BCELoss(),
+  'MSE Loss': torch.nn.MSELoss(),
+  'Huber Loss': torch.nn.HuberLoss(),
+  'Hinge loss': torch.nn.HingeEmbeddingLoss(),
+  'Smooth L1': torch.nn.SmoothL1Loss(),
+}
 
 @st.cache_resource
 def load_device() -> torch.device:
@@ -45,15 +53,10 @@ def load_dataset() -> CelebA:
 
   return CelebA(
     dataset_path='resources/datasets/celeba',
-    image_directory='img_align_celeba',
+    image_directory='images',
     annotations_directory='annotations',
     image_transform=transform
   )
-
-@st.cache_resource
-def load_manipulator(generator: Generator, classifier: Classifier, device: torch.device) -> LatentSpaceManipulator:
-  print('Loading manipulator...')
-  return LatentSpaceManipulator(generator, classifier, device)
 
 def array_from_torch(tensor: torch.Tensor) -> np.ndarray:
   return np.transpose(vutils.make_grid(tensor, padding=2, normalize=True).cpu(), (1, 2, 0)).numpy()
@@ -66,23 +69,20 @@ def main():
   generator = load_generator(device)
   classifier = load_classifier(device)
   dataset = load_dataset()
-  manipulator = load_manipulator(generator, classifier, device)
   FeatureCount = len(dataset.annotations.columns)
 
-  def handle_generation():
-    vector = create_latent_vectors(1, LatentVectorSize, device)
-
-    generated = generator(vector)
-    features = classifier(generated)
-
-    st.session_state[f'latent'] = vector
-    st.session_state[f'image'] = array_from_torch(generated)
-    st.session_state[f'features'] = features.cpu().detach().numpy()[0]
-
-  if 'image' not in st.session_state:
-    handle_generation()
-
   with st.container():
+    def handle_generation():
+      vector = create_latent_vectors(1, LatentVectorSize, device)
+
+      generated = generator(vector)
+      features = classifier(generated)
+
+      st.session_state['latent'] = vector
+      st.session_state['image'] = array_from_torch(generated)
+      st.session_state['features'] = features.cpu().detach().numpy()[0]
+
+    if 'image' not in st.session_state: handle_generation()
     st.button("Generate new image", on_click=handle_generation)
     st.image(st.session_state['image'])
 
@@ -103,8 +103,9 @@ def main():
 
   with st.container():
     NoFeature = "-"
-
-    choice = st.selectbox("Choose attribute to flip", (NoFeature, *dataset.annotations.columns))
+    attribute = st.selectbox("Choose an attribute to flip", (NoFeature, *dataset.annotations.columns))
+    loss = st.selectbox("Choose a loss function", loss_fns.keys())
+    loss_fn = loss_fns[loss]
     steps = st.slider("Number of steps", min_value=100, max_value=10_000, value=1000)
     alpha = st.slider("Alpha", min_value=0.001, max_value=1.0, value=0.5)
 
@@ -129,6 +130,7 @@ def main():
         if step != steps - 1:
           features = traits.cpu().detach().numpy()[0]
 
+      manipulator = LatentSpaceManipulator(generator, classifier, device, loss_fn)
       vector = manipulator.manipulate(
         st.session_state['latent'],
         torch.tensor(target_annotations, device=device),
@@ -143,11 +145,11 @@ def main():
       frames = animation.ArtistAnimation(figure, frames, interval=1000, repeat_delay=1000, blit=True)
       frames.save('animation.gif', writer='imagemagick', fps=20)
 
-      st.session_state[f'latent_manipulated'] = vector
-      st.session_state[f'image_manipulated'] = images[0]
-      st.session_state[f'features_manipulated'] = features
+      st.session_state['latent_manipulated'] = vector
+      st.session_state['image_manipulated'] = images[0]
+      st.session_state['features_manipulated'] = features
 
-    st.button("Manipulate", on_click=handle_manipulation, args=(choice, steps, alpha), disabled=choice == NoFeature)
+    st.button("Manipulate", on_click=handle_manipulation, args=(attribute, steps, alpha), disabled=attribute == NoFeature)
 
     if 'image_manipulated' in st.session_state:
       st.image(st.session_state['image_manipulated'])

@@ -4,10 +4,11 @@ import torch
 from torch import nn, Tensor
 
 class LatentSpaceManipulator:
-  def __init__(self, generator: nn.Module, classifier: nn.Module, device: torch.device):
+  def __init__(self, generator: nn.Module, classifier: nn.Module, device: torch.device, loss_fn: Callable[[Tensor, Tensor], Tensor]):
     self.generator = generator
     self.classifier = classifier
     self.device = device
+    self.loss_fn = loss_fn
 
   def manipulate(
       self,
@@ -27,7 +28,7 @@ class LatentSpaceManipulator:
       generated_image = self.generator(latent_vector)
       predicted_traits = self.classifier(generated_image)
 
-      loss = ((predicted_traits - target_traits) ** 2).mean()
+      loss = self.loss_fn(predicted_traits, target_traits)
       loss.backward()
 
       with torch.no_grad():
