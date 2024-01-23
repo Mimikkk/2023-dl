@@ -28,11 +28,15 @@ class LatentSpaceManipulator:
       generated_image = self.generator(latent_vector)
       predicted_traits = self.classifier(generated_image)
 
+      if  isinstance(self.loss_fn, nn.BCELoss):
+        predicted_traits = predicted_traits.squeeze(0)
       loss = self.loss_fn(predicted_traits, target_traits)
+      if  isinstance(self.loss_fn, nn.BCELoss):
+        predicted_traits = predicted_traits.unsqueeze(0)
+
       loss.backward()
 
-      with torch.no_grad():
-        latent_vector -= alpha * latent_vector.grad
+      with torch.no_grad(): latent_vector -= alpha * latent_vector.grad
       latent_vector.grad.zero_()
 
       if on_step: on_step(_, generated_image, predicted_traits, latent_vector.clone())
