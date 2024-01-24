@@ -24,6 +24,7 @@ def main():
 
   iscream("Inside virtual env.")
   iscream('Installing packages...')
+  install('jupyter')
 
   iscream('Installing torch. Ensure CUDA is installed...')
   install('torch', 'torchvision', 'torchaudio', '--index-url', 'https://download.pytorch.org/whl/cu118')
