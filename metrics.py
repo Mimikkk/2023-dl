@@ -1,6 +1,5 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
-from torchvision.models import inception_v3
 import torch
 
 from src.mod.datasets import CelebA
@@ -11,7 +10,7 @@ from src.mod.models import Generator
 
 def main():
   LatentVectorSize = 100
-  EvaluationSampleCount = 5
+  EvaluationSampleCount = 1000
 
   device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
   generator = Generator(
@@ -38,15 +37,17 @@ def main():
     shuffle=True
   )
 
-  vectors = create_latent_vectors(EvaluationSampleCount, LatentVectorSize, device)
-  generated = generator(vectors)
+  vectors = create_latent_vectors(
+    EvaluationSampleCount,
+    LatentVectorSize,
+    device
+  )
+  fake_images = generator(vectors)
+  real_images, _, _ = next(iter(dataloader))
 
-  images, _, _ = next(iter(dataloader))
-
-  # inception = inception_v3(init_weights=True).eval().to(device)
-  # fid = calculate_fid(inception, generated, images)
+  fid = calculate_fid(fake_images, real_images)
   ppl = calculate_ppl(generator, device, LatentVectorSize, EvaluationSampleCount)
-  # print(f'FID Score: {fid:.3f}')
+  print(f'FID Score: {fid:.3f} ( Lower is better, InputSize dependent )')
   print(f'PPL Score: {ppl:.3f} ( Lower Usually is better as its smoother )')
 
 

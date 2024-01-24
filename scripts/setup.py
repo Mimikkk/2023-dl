@@ -27,6 +27,7 @@ def main():
 
   iscream('Installing torch. Ensure CUDA is installed...')
   install('torch', 'torchvision', 'torchaudio', '--index-url', 'https://download.pytorch.org/whl/cu118')
+  install('torchmetrics', 'torchmetrics[image]')
 
   iscream('Installing tensorboard...')
   install('tensorboard')
