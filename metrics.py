@@ -46,7 +46,7 @@ def main():
   real_images, _, _ = next(iter(dataloader))
 
   fid = calculate_fid(fake_images, real_images)
-  ppl = calculate_ppl(generator, device, LatentVectorSize, EvaluationSampleCount)
+  ppl = calculate_ppl(fake_images)
   print(f'FID Score: {fid:.3f} ( Lower is better, InputSize dependent )')
   print(f'PPL Score: {ppl:.3f} ( Lower Usually is better as its smoother )')
 
