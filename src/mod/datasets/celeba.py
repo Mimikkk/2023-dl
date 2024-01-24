@@ -29,7 +29,7 @@ class CelebA(Dataset):
       f"{self.dataset_path}/{self.annotations_directory}/list_attr_celeba.txt",
       skiprows=1,
       nrows=self.size,
-      delim_whitespace=True,
+      sep='\s+'
     )
 
   def __len__(self):
