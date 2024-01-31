@@ -1,3 +1,4 @@
+import pickle
 from typing import Optional, Callable
 
 print('Importing streamlit...')
@@ -34,12 +35,12 @@ def load_device() -> torch.device:
 @st.cache_resource
 def load_classifier(device: torch.device) -> Classifier:
   print('Loading classifier...')
-  return Classifier((3, 64, 64), 40, with_weights=torch.load('demo/c.run_three.pt')).to(device)
+  return Classifier((3, 64, 64), 40, with_weights=torch.load('demo/c.metrics-combined.pt')).to(device)
 
 @st.cache_resource
 def load_generator(device: torch.device) -> Generator:
   print('Loading generator...')
-  return Generator(100, 64, 3, with_weights=torch.load('demo/g.run_three.pt')).to(device)
+  return Generator(100, 64, 3, with_weights=torch.load('demo/g.metrics-combined.pt')).to(device)
 
 @st.cache_resource
 def load_dataset() -> CelebA:
